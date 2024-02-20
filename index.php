@@ -1,3 +1,9 @@
+<?php
+include("./php/connection.php");
+
+?>
+
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -8,11 +14,8 @@
   <link rel="stylesheet" href="style.css">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Jost:wght@100;200;300;400;500;600;700&display=swap"
-    rel="stylesheet">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
-    integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA=="
-    crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <link href="https://fonts.googleapis.com/css2?family=Jost:wght@100;200;300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
   <link rel="stylesheet" href="https://unpkg.com/boxicons@latest/css/boxicons.min.css">
 </head>
 
@@ -41,7 +44,120 @@
       <button class="main-btn">Shop Now</button>
     </div>
   </section>
-  <section class="bag" id="bag">
+
+  <style>
+    /* Container styling */
+    .card-container {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-around;
+      gap: 20px;
+      padding: 20px;
+    }
+
+    /* Card styling */
+    .card {
+      width: 200px;
+      background-color: #f5f5f5;
+      border-radius: 8px;
+      padding: 10px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      text-align: center;
+    }
+
+    /* Image styling */
+    .card-image img {
+      width: 100%;
+      height: auto;
+      border-radius: 8px;
+    }
+
+    /* Title styling */
+    .card-content h2 {
+      margin-top: 10px;
+      font-size: 16px;
+      color: #333;
+    }
+
+    /* Price styling */
+    .card-content .price {
+      margin-top: 8px;
+      font-size: 14px;
+      color: #555;
+    }
+  </style>
+
+
+  <div class="card-container">
+    <?php
+    $query = "SELECT * FROM books";
+    $result = mysqli_query($con, $query);
+    $itemCount = 0;
+
+    while ($row = mysqli_fetch_assoc($result)) {
+    ?>
+      <div class="card">
+        <div class="card-image">
+          <img loading='lazy' src='./images/<?= basename($row['image']) ?>' alt='Food Image' />
+        </div>
+        <hr />
+        <div class="card-content">
+          <h2><?= $row['title'] ?></h2>
+          <div class="stars"></div>
+          <div class="price">₹<?= $row['price'] ?></div>
+          <a href="./php/purchase.php?book_id=<?php echo $row['book_id']; ?>">Buy Now</a>
+        </div>
+      </div>
+    <?php
+      $itemCount++;
+
+      if ($itemCount % 4 == 0) {
+        echo "</div><div class='card-container'>";
+      }
+    }
+
+    if ($itemCount % 4 != 0) {
+      echo "</div>";
+    }
+    ?>
+  </div>
+
+
+  <!-- <div>
+  <?php
+  $query = "SELECT * FROM books";
+  $result = mysqli_query($con, $query);
+  $itemCount = 0;
+
+  while ($row = mysqli_fetch_assoc($result)) {
+  ?>
+    <div>
+      <div>
+        <img loading='lazy' src='./images/<?= basename($row['image']) ?>' alt='Food Image' />
+      </div>
+      <hr />
+      <div>
+        <h2><?= $row['title'] ?></h2>
+        <div></div>
+        <div>₹<?= $row['price'] ?></div>
+      </div>
+    </div>
+  <?php
+    $itemCount++;
+
+    if ($itemCount % 4 == 0) {
+      echo "</div><div>";
+    }
+  }
+
+  if ($itemCount % 4 != 0) {
+    echo "</div>";
+  }
+  ?>
+</div> -->
+
+
+  <!-- <section class="bag" id="bag">
     <h2>Our Featured Backpack</h2>
     <div class="center-text">
       <div class="container">
@@ -149,8 +265,8 @@
         </div>
       </div>
     </div>
-  </section>
-  <script src='main.js'></script>
+  </section> -->
+  <!-- <script src='main.js'></script> -->
 </body>
 
 </html>
