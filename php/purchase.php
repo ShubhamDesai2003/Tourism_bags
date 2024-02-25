@@ -1,14 +1,36 @@
 <?php
 include("./connection.php");
-$book_id = isset($_GET['book_id']) ? $_GET['book_id'] : 0;
 
-$query = "SELECT * FROM books WHERE book_id = $book_id";
+$id = isset($_GET['book_id']) ? $_GET['book_id'] : 0;
+$qrCodeImage = "../image/QR_code.jpg";
+
+$query = "SELECT * FROM bags WHERE book_id = $id";
 $result = mysqli_query($con, $query);
 $row = mysqli_fetch_assoc($result);
 
-$qrCodeImage = "../image/QR_code.jpg";
+// Update quantity in the database
+$query = "UPDATE bags SET quantity = quantity - 1 WHERE book_id = ?";
+$stmt = mysqli_prepare($con, $query);
+
+if ($stmt) {
+    mysqli_stmt_bind_param($stmt, "i", $id);
+    mysqli_stmt_execute($stmt);
+    mysqli_stmt_close($stmt);
+
+} else {
+    echo "Error in preparing the statement: " . mysqli_error($con);
+}
+
+
+//Transaction
+$name = $row['title'];
+
+$query = "INSERT INTO orders (order_id, name) VALUES ('$id', '$name')";
+$result = mysqli_query($con, $query);
+
 
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 

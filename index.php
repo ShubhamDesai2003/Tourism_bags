@@ -1,6 +1,9 @@
 <?php
 include("./php/connection.php");
 
+$query = "SELECT * FROM bags";
+$result = mysqli_query($con, $query);
+
 ?>
 
 
@@ -87,74 +90,35 @@ include("./php/connection.php");
     }
   </style>
 
+  <section class="bag" id="bag">
+    <h2>Our Featured Backpack</h2>
+    <div class="center-text">
+      <?php
 
-  <div class="card-container">
-    <?php
-    $query = "SELECT * FROM books";
-    $result = mysqli_query($con, $query);
-    $itemCount = 0;
+      while ($row = mysqli_fetch_assoc($result)) {
 
-    while ($row = mysqli_fetch_assoc($result)) {
-    ?>
-      <div class="card">
-        <div class="card-image">
-          <img loading='lazy' src='./images/<?= basename($row['image']) ?>' alt='Food Image' />
+      ?>
+        <div class="container">
+          <div class="box">
+            <img src="./image/<?= basename($row['image']); ?>" alt="Book Image">
+
+            <div class="p-nm">
+              <h5>Sale</h5>
+            </div>
+            <div class="price">
+              <h4><?= $row['title'] ?></h4>
+              <p>₹<?= $row['price'] ?></p>
+            </div>
+            <a href="./php/form.php?book_id=<?= $row['book_id'] ?>" class="main-btn">Buy Now</a>
+            <!-- <a href="./php/form.php" class="main-btn">Buy Now</a> -->
+          </div>
         </div>
-        <hr />
-        <div class="card-content">
-          <h2><?= $row['title'] ?></h2>
-          <div class="stars"></div>
-          <div class="price">₹<?= $row['price'] ?></div>
-          <a href="./php/purchase.php?book_id=<?php echo $row['book_id']; ?>">Buy Now</a>
-        </div>
-      </div>
-    <?php
-      $itemCount++;
-
-      if ($itemCount % 4 == 0) {
-        echo "</div><div class='card-container'>";
+      <?php
       }
-    }
-
-    if ($itemCount % 4 != 0) {
-      echo "</div>";
-    }
-    ?>
-  </div>
-
-
-  <!-- <div>
-  <?php
-  $query = "SELECT * FROM books";
-  $result = mysqli_query($con, $query);
-  $itemCount = 0;
-
-  while ($row = mysqli_fetch_assoc($result)) {
-  ?>
-    <div>
-      <div>
-        <img loading='lazy' src='./images/<?= basename($row['image']) ?>' alt='Food Image' />
-      </div>
-      <hr />
-      <div>
-        <h2><?= $row['title'] ?></h2>
-        <div></div>
-        <div>₹<?= $row['price'] ?></div>
-      </div>
+      ?>
     </div>
-  <?php
-    $itemCount++;
+  </section>
 
-    if ($itemCount % 4 == 0) {
-      echo "</div><div>";
-    }
-  }
-
-  if ($itemCount % 4 != 0) {
-    echo "</div>";
-  }
-  ?>
-</div> -->
 
 
   <!-- <section class="bag" id="bag">
@@ -173,6 +137,7 @@ include("./php/connection.php");
           <button class="main-btn">Shop Now</button>
         </div>
       </div>
+
       <div class="container">
         <div class="box">
           <img src="image/bag01.jpg" alt="">

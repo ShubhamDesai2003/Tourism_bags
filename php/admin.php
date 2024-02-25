@@ -4,7 +4,7 @@
 
     include('./connection.php');
 
-    $query = "select * from books";
+    $query = "select * from bags";
 
     $result = mysqli_query($con, $query);
 
@@ -16,7 +16,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>List Books</title>
+    <title>List bags</title>
     <style>
         /* Style the container */
         .container {

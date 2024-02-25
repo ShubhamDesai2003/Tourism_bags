@@ -4,45 +4,28 @@ $title = "Add new book";
 
 include("./connection.php");
 
-// if ($_SERVER['REQUEST_METHOD'] == "POST") {
-
-//         $title = $_POST["title"];
-//         $price = $_POST["price"];
-//         $quantity = $_POST["quantity"];
-//         $image = "./images";
-
-
-// 		$query = "INSERT INTO books (title, price, quantity) VALUES ( $title, $image,  $price, $quantity)";
-// 		$result = mysqli_query($con, $query);
-
-//         echo "Bag added successfully.";
-//     die();
-// }
-
 if ($_SERVER['REQUEST_METHOD'] == "POST") {
+    $title = $_POST["title"];
+    $price = $_POST["price"];
+    $quantity = $_POST["quantity"];
+    $image = "./image";  // Assuming there is an input field for the image in your form
 
-	$title = $_POST["title"];
-	$price = $_POST["price"];
-	$quantity = $_POST["quantity"];
-	$image = "./images";
+    $query = "INSERT INTO bags (title, image, price, quantity) VALUES (?, ?, ?, ?)";
+    $stmt = $con->prepare($query);
+    $stmt->bind_param("ssdi", $title, $image, $price, $quantity);
 
+    if ($stmt->execute()) {
+        // Query executed successfully
+        header("Location: admin.php");
+    } else {
+        // Display an error message if the query fails
+        echo "Error: " . $stmt->error;
+    }
 
-	$query = "INSERT INTO books (title, image, price, quantity) VALUES (?, ?, ?, ?)";
-	$stmt = $con->prepare($query);
-	$stmt->bind_param("ssdi", $title, $image, $price, $quantity);
-
-	if ($stmt->execute()) {
-		// Query executed successfully
-		header("Location: admin.php");
-	} else {
-		// Display an error message if the query fails
-		echo "Error: " . $stmt->error;
-	}
-
-	$stmt->close();
+    $stmt->close();
 }
-
 ?>
+
 
 <!DOCTYPE html>
 <html lang="en">
@@ -135,7 +118,8 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
 			</tr>
 		</table>
 		<input type="submit" name="add" value="Add new book" class="btn btn-primary">
-		<input type="reset" value="Cancel" class="btn btn-default">
+		<!-- <input type="reset" value="Cancel" class="btn btn-default"> -->
+		<a href="./admin.php" class="btn-primary btn">Cancel</a>
 	</form>
 
 </body>
